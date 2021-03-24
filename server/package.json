@@ -1,0 +1,13 @@
+{
+  "name": "graphql",
+  "version": "1.0.0",
+  "description": "graphql_application",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.5.0"
+  }
+}
