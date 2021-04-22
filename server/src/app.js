@@ -3,9 +3,11 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const graphqlHTTP = require('express-graphql').graphqlHTTP;;
 import schema from '../schema/schema.js';
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 
 mongoose.connect('mongodb+srv://graphqladmin:graphqlpass@cluster0.9a6rv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
   useNewUrlParser: true,

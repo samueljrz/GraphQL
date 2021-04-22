@@ -4,6 +4,8 @@ const require = createRequire(import.meta.url);
 const _ = require('lodash');
 import Book from '../models/book.js';
 import Author from '../models/author.js';
+import axios from 'axios'
+import { AccountName, VtexKey, VtexToken } from '../config/config.js'
 
 const { GraphQLObjectType, 
         GraphQLString, 
@@ -49,8 +51,9 @@ const AuthorType = new GraphQLObjectType({
     },
     books: {
       type: new GraphQLList(BookType),
-      resolve(parent, args) {
+      async resolve(parent, args) {
         return Book.find({ authorId: parent.id });
+
       }
     }
   })
@@ -62,27 +65,59 @@ const RootQuery = new GraphQLObjectType({
     book: {
       type: BookType,
       args: { id: { type: GraphQLID } },
-      resolve(parent, args) {
-        return Book.findById(args.id);
+      async resolve(parent, args) {
+          return Book.findById(args.id);
+        // const content = await axios.get(`https://${AccountName}.vtexcommercestable.com.br/api/dataentities/books/documents/${args.id}?_fields=name,genre,authorId,id`, {
+        //   headers: {
+        //     "x-vtex-api-appKey": VtexKey,
+        //     "x-vtex-api-appToken": VtexToken,
+        //     'Content-Type': 'application/json'
+        //   }
+        // })
+        // return content.data;
       }
     },
     author: {
       type: AuthorType,
       args: { id: { type: GraphQLID } },
-      resolve(parent, args) {
+      async resolve(parent, args) {
         return Author.findById(args.id);
+        // const content = await axios.get(`https://{{AccountName}}.vtexcommercestable.com.br/api/dataentities/authors/documents/${args.id}?_fields=name,age,id`, {
+        //   headers: {
+        //     "x-vtex-api-appKey": VtexKey,
+        //     "x-vtex-api-appToken": VtexToken,
+        //     'Content-Type': 'application/json'
+        //   }
+        // })
+        // return content.data;
       }
     },
     books: {
       type: new GraphQLList(BookType),
-      resolve(parent, args) {
+      async resolve(parent, args) {
         return Book.find({});
+        // const content = await axios.get(`https://${AccountName}.vtexcommercestable.com.br/api/dataentities/books/search?_fields=name,genre,authorId,id`, {
+        //   headers: {
+        //     "x-vtex-api-appKey": VtexKey,
+        //     "x-vtex-api-appToken": VtexToken,
+        //     'Content-Type': 'application/json'
+        //   }
+        // })
+        // return content.data;
       }
     },
     authors: {
       type: new GraphQLList(AuthorType),
-      resolve(parent, args) {
+      async resolve(parent, args) {
         return Author.find({});
+        // const content = await axios.get(`https://${AccountName}.vtexcommercestable.com.br/api/dataentities/authors/search?_fields=name,age,id`, {
+        //   headers: {
+        //     "x-vtex-api-appKey": VtexKey,
+        //     "x-vtex-api-appToken": VtexToken,
+        //     'Content-Type': 'application/json'
+        //   }
+        // })
+        // return content.data;
       }
     }
   }
@@ -128,3 +163,4 @@ export default new GraphQLSchema({
   query: RootQuery,
   mutation: Mutation
 });
+
